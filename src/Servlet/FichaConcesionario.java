@@ -109,7 +109,7 @@ public class FichaConcesionario extends HttpServlet {
 								? "onLoad=\"alert('" + mensajeAlUsuario + "');\""
 								: "")
 						+ " >\r\n" + "<h1>Ficha de concesionario</h1>\r\n"
-						+ "<a href=\"ListadoConcesionarios\">Ir al listado de concesionario</a>"
+						+ "<a href=\"ListadoConcesionario\">Ir al listado de concesionario</a>"
 						+ "<form id=\"form1\" name=\"form1\" method=\"post\" action=\"FichaConcesionario\" onsubmit=\"return validateForm()\">\r\n"
 						+ " <input type=\"hidden\" name=\"idConcesionario\" value=\""
 						+ ((concesionario != null) ? concesionario.getId() : "") + "\"\\>" + "  <p>\r\n"
