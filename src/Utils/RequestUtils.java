@@ -1,4 +1,4 @@
-package Servlet.Utils;
+package Utils;
 
 import java.util.Enumeration;
 import java.util.HashMap;

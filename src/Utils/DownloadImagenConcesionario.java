@@ -1,6 +1,6 @@
-package Servlet.Utils;
+package Utils;
 
-import java.io.ByteArrayInputStream;	
+import java.io.ByteArrayInputStream;		
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,7 +19,7 @@ import model.controladores.ConcesionarioControlador;
 /**
  * Servlet implementation class PrimerServlet
  */
-@WebServlet(description = "Download imagen almacenada en BBDD", urlPatterns = { "/utils/DownloadImagenConcesionario" })
+@WebServlet(description = "Download imagen almacenada en BBDD", urlPatterns = { "/Utils/DownloadImagenConcesionario" })
 public class DownloadImagenConcesionario extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

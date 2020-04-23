@@ -1,4 +1,4 @@
-package Servlet.Utils;
+package Utils;
 
 public class FormularioIncorrectoRecibidoException extends Exception {
 

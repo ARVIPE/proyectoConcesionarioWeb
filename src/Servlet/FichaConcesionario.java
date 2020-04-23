@@ -1,6 +1,6 @@
 package Servlet;
 
-import java.io.IOException;			
+import java.io.IOException;					
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -11,10 +11,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import Servlet.Utils.FormularioIncorrectoRecibidoException;
-import Servlet.Utils.RequestUtils;
+import Utils.FormularioIncorrectoRecibidoException;
+import Utils.RequestUtils;
 import model.Concesionario;
 import model.controladores.ConcesionarioControlador;
+
 
 
 
@@ -131,7 +132,7 @@ public class FichaConcesionario extends HttpServlet {
 						+ "<a href=\"ListadoConcesionario\">Ir al listado de concesionario</a>"
 						+ "<form id=\"form1\" name=\"form1\" method=\"post\" action=\"FichaConcesionario\" enctype=\"multipart/form-data\" onsubmit=\"return validateForm()\">\r\n"
 						+ " <img src=\"Utils/DownloadImagenConcesionario?idConcesionario=" + concesionario.getId() + "\" width='100px' height='100px'/>" 
-						+ " <input type=\"hidden\" name=\"idConcesionario\" value=\""
+						+ " <input type=\"hidden\" name=\"idConcesionario\" value=\"" + concesionario.getId() + "\"\\>"
 						+ "  <p>\r\n"  
 						+ "    <label for=\"ficheroImagen\">Imagen:</label>\r\n"  
 						+ "    <input name=\"ficheroImagen\" type=\"file\" id=\"ficheroImagen\" />\r\n" 
