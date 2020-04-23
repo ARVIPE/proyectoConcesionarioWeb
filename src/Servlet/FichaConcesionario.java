@@ -1,7 +1,8 @@
 package Servlet;
 
-import java.io.IOException;		
+import java.io.IOException;			
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -11,8 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Servlet.Utils.FormularioIncorrectoRecibidoException;
+import Servlet.Utils.RequestUtils;
 import model.Concesionario;
 import model.controladores.ConcesionarioControlador;
+
 
 
 
@@ -37,21 +40,32 @@ public class FichaConcesionario extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		// Obtengo una HashMap con todos los parámetros del request, sea este del tipo que sea;
+		HashMap<String, Object> hashMap = RequestUtils.requestToHashMap(request);
 		// Para plasmar la información de un profesor determinado utilizaremos un
 		// parámetro, que debe llegar a este Servlet obligatoriamente
 		// El parámetro se llama "idProfesor" y gracias a él podremos obtener la
 		// información del profesor y mostrar sus datos en pantalla
-		Concesionario concesionario = new Concesionario();
+		Concesionario concesionario = null;
 		// Obtengo el profesor a editar, en el caso de que el profesor exista se
 		// cargarán sus datos, en el caso de que no exista quedará a null
 		try {
-			int idConcesionario = getIntParameter(request, "idConcesionario"); // Necesito obtener el id del profesor
-																				// que se quiere editar. En caso de un
-																				// alta
+			int idConcesionario = RequestUtils.getIntParameterFromHashMap(hashMap, "idConcesionario"); // Necesito obtener el id del profesor que se quiere editar. En caso de un alta
 			// de profesor obtendríamos el valor 0 como idProfesor
-			concesionario = (Concesionario) ConcesionarioControlador.getControlador().find(idConcesionario);
+			if (idConcesionario != 0) {
+				concesionario = (Concesionario) ConcesionarioControlador.getControlador().find(idConcesionario);
+			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		
+		// Inicializo unos valores correctos para la presentación del concesionario
+		if (concesionario == null) {
+			concesionario = new Concesionario();
+		}
+		if (concesionario.getCif() == null) concesionario.setCif("");
+		if (concesionario.getNombre() == null) concesionario.setNombre("");
+		if (concesionario.getLocalidad() == null) concesionario.setLocalidad("");
 
 		// Ahora debo determinar cuál es la acción que este página debería llevar a
 		// cabo, en función de los parámetros de entrada al Servlet.
@@ -66,28 +80,33 @@ public class FichaConcesionario extends HttpServlet {
 		String mensajeAlUsuario = "";
 
 		// Acción eliminar
-		if (request.getParameter("eliminar") != null) {
-			// intento eliminar el registro, si el borrado es correcto redirijo la petición
-			// hacia el listado de concesionarios
+		if (RequestUtils.getStringParameterFromHashMap(hashMap, "eliminar") != null) {
+			// Intento eliminar el registro, si el borrado es correcto redirijo la petición hacia el listado de profesores
 			try {
 				ConcesionarioControlador.getControlador().remove(concesionario);
-				response.sendRedirect(request.getContextPath() + "/ListadoConcesionario"); // hay que hacer la lista
-			} catch (Exception e2) {
-				mensajeAlUsuario = "No se puedo eliminar. Quizás haya restricciones asociadas a este registro";
+				response.sendRedirect(request.getContextPath() + "/ListadoConcesionario"); // Redirección del response hacia el listado
+			}
+			catch (Exception ex) {
+				mensajeAlUsuario = "Imposible eliminar. Es posible que existan restricciones.";
 			}
 		}
 
 		// Segunda acción posible: guardar
-		if (request.getParameter("guardar") != null) {
+		if (RequestUtils.getStringParameterFromHashMap(hashMap, "guardar") != null) {
 			// Obtengo todos los datos del profesor y los almaceno en BBDD
 			try {
-				concesionario.setCif(getStringParameter(request, "cif"));
-				concesionario.setNombre(getStringParameter(request, "nombre"));
-				concesionario.setLocalidad(getStringParameter(request, "localidad"));
+				concesionario.setCif(RequestUtils.getStringParameterFromHashMap(hashMap, "cif"));
+				concesionario.setNombre(RequestUtils.getStringParameterFromHashMap(hashMap, "nombre"));
+				concesionario.setLocalidad(RequestUtils.getStringParameterFromHashMap(hashMap, "localidad"));
+				byte[] posibleImagen = RequestUtils.getByteArrayFromHashMap(hashMap, "ficheroImagen");
+				if (posibleImagen != null && posibleImagen.length > 0) {
+					concesionario.setImagen(posibleImagen);
+				}
 
+				// Finalmente guardo el objeto de tipo concesionario
 				ConcesionarioControlador.getControlador().save(concesionario);
 				mensajeAlUsuario = "Guardado correctamente";
-			} catch (FormularioIncorrectoRecibidoException e) {
+			} catch (Exception e) {
 				throw new ServletException(e);
 			}
 		}
@@ -110,9 +129,13 @@ public class FichaConcesionario extends HttpServlet {
 								: "")
 						+ " >\r\n" + "<h1>Ficha de concesionario</h1>\r\n"
 						+ "<a href=\"ListadoConcesionario\">Ir al listado de concesionario</a>"
-						+ "<form id=\"form1\" name=\"form1\" method=\"post\" action=\"FichaConcesionario\" onsubmit=\"return validateForm()\">\r\n"
+						+ "<form id=\"form1\" name=\"form1\" method=\"post\" action=\"FichaConcesionario\" enctype=\"multipart/form-data\" onsubmit=\"return validateForm()\">\r\n"
+						+ " <img src=\"Utils/DownloadImagenConcesionario?idConcesionario=" + concesionario.getId() + "\" width='100px' height='100px'/>" 
 						+ " <input type=\"hidden\" name=\"idConcesionario\" value=\""
-						+ ((concesionario != null) ? concesionario.getId() : "") + "\"\\>" + "  <p>\r\n"
+						+ "  <p>\r\n"  
+						+ "    <label for=\"ficheroImagen\">Imagen:</label>\r\n"  
+						+ "    <input name=\"ficheroImagen\" type=\"file\" id=\"ficheroImagen\" />\r\n" 
+						+ "  </p>\r\n"  
 						+ "    <label for=\"cif\">Cif:</label>\r\n"
 						+ "    <input name=\"cif\" type=\"text\" id=\"cif\"  value=\""
 						+ ((concesionario != null) ? concesionario.getCif() : "") + "\" />\r\n" + "  </p>\r\n"
@@ -122,8 +145,8 @@ public class FichaConcesionario extends HttpServlet {
 						+ "  <p>\r\n" + "    <label for=\"localidad\">Localidad: </label>\r\n"
 						+ "    <input name=\"localidad\" type=\"text\" id=\"localidad\" value=\""
 						+ ((concesionario != null) ? concesionario.getLocalidad() : "") + "\" />\r\n" + "  </p>\r\n"
-						+ "  <p>\r\n" + "    <input type=\"submit\" name=\"guardar\" value=\"Guardar\" />\r\n"
-						+ "    <input type=\"submit\" name=\"eliminar\" value=\"Eliminar\" />\r\n" + "  </p>\r\n"
+						+ "  <p>\r\n" + "<input type=\"submit\" name=\"guardar\" value=\"Guardar\" />\r\n"
+						+ "  <input type=\"submit\" name=\"eliminar\" value=\"Eliminar\" />\r\n" + "  </p>\r\n"
 						+ "</form>" + "</body>\r\n" + "</html>\r\n" + "");
 	}
 
@@ -134,23 +157,6 @@ public class FichaConcesionario extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		doGet(request, response);
-	}
-
-	/**
-	 * 
-	 * @param request
-	 * @param nombreParametro
-	 * @return
-	 * @throws FormularioIncorrectoRecibidoException
-	 */
-	public int getIntParameter(HttpServletRequest request, String nombreParametro)
-			throws FormularioIncorrectoRecibidoException {
-		try {
-			return Integer.parseInt(request.getParameter(nombreParametro));
-		} catch (Exception e) {
-			throw new FormularioIncorrectoRecibidoException(
-					"No se ha recibido valor entero para el parámetro " + nombreParametro);
-		}
 	}
 
 	/**
