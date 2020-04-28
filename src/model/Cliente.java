@@ -19,7 +19,7 @@ public class Cliente extends Entidad implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 
-	private boolean activo;
+	private byte activo;
 
 	private String apellidos;
 
@@ -47,11 +47,11 @@ public class Cliente extends Entidad implements Serializable {
 		this.id = id;
 	}
 
-	public boolean getActivo() {
+	public byte getActivo() {
 		return this.activo;
 	}
 
-	public void setActivo(boolean activo) {
+	public void setActivo(byte activo) {
 		this.activo = activo;
 	}
 
@@ -108,19 +108,6 @@ public class Cliente extends Entidad implements Serializable {
 		venta.setCliente(this);
 
 		return venta;
-	}
-	
-	@Override
-	public String toString() {
-		return nombre + " " + apellidos;
-	}
-	
-	public boolean equals(Object obj) {
-		Cliente cl = (Cliente) obj;
-		if(this.id == cl.id) {
-			return true;
-		}
-		return false;
 	}
 
 	public Venta removeVenta(Venta venta) {

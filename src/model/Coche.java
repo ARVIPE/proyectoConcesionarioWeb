@@ -90,19 +90,6 @@ public class Coche extends Entidad implements Serializable {
 
 		return venta;
 	}
-	
-	@Override
-	public String toString() {
-		return modelo + "-" + color;
-	}
-	
-	public boolean equals(Object obj) {
-		Coche co = (Coche) obj;
-		if(this.id == co.id) {
-			return true;
-		}
-		return false;
-	}
 
 	public Venta removeVenta(Venta venta) {
 		getVentas().remove(venta);

@@ -1,6 +1,6 @@
 package model;
 
-import java.io.Serializable;	
+import java.io.Serializable;
 import javax.persistence.*;
 
 
@@ -10,7 +10,7 @@ import javax.persistence.*;
  */
 @Entity
 @NamedQuery(name="Sequence.findAll", query="SELECT s FROM Sequence s")
-public class Sequence extends Entidad implements Serializable {
+public class Sequence implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -18,11 +18,14 @@ public class Sequence extends Entidad implements Serializable {
 	@Column(name="SEQ_COUNT")
 	private int seqCount;
 
+
 	@Column(name="SEQ_NAME")
 	private String seqName;
 
+
 	public Sequence() {
 	}
+
 
 	public int getSeqCount() {
 		return this.seqCount;
@@ -38,12 +41,6 @@ public class Sequence extends Entidad implements Serializable {
 
 	public void setSeqName(String seqName) {
 		this.seqName = seqName;
-	}
-
-	@Override
-	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 }
