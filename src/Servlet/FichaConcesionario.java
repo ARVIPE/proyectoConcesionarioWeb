@@ -45,10 +45,10 @@ public class FichaConcesionario extends HttpServlet {
 		HashMap<String, Object> hashMap = RequestUtils.requestToHashMap(request);
 		// Para plasmar la información de un profesor determinado utilizaremos un
 		// parámetro, que debe llegar a este Servlet obligatoriamente
-		// El parámetro se llama "idProfesor" y gracias a él podremos obtener la
+		// El parámetro se llama "idConcesionario" y gracias a él podremos obtener la
 		// información del profesor y mostrar sus datos en pantalla
 		Concesionario concesionario = null;
-		// Obtengo el profesor a editar, en el caso de que el profesor exista se
+		// Obtengo el concesionario a editar, en el caso de que el concesionario exista se
 		// cargarán sus datos, en el caso de que no exista quedará a null
 		try {
 			int idConcesionario = RequestUtils.getIntParameterFromHashMap(hashMap, "idConcesionario"); // Necesito obtener el id del profesor que se quiere editar. En caso de un alta
