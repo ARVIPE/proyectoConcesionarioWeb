@@ -19,7 +19,7 @@ public class Cliente extends Entidad implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 
-	private byte activo;
+	private boolean activo;
 
 	private String apellidos;
 
@@ -47,11 +47,11 @@ public class Cliente extends Entidad implements Serializable {
 		this.id = id;
 	}
 
-	public byte getActivo() {
+	public boolean getActivo() {
 		return this.activo;
 	}
 
-	public void setActivo(byte activo) {
+	public void setActivo(boolean activo) {
 		this.activo = activo;
 	}
 
@@ -81,6 +81,12 @@ public class Cliente extends Entidad implements Serializable {
 
 	public String getLocalidad() {
 		return this.localidad;
+	}
+	
+
+	@Override
+	public String toString() {
+		return ""+ id + "";
 	}
 
 	public void setLocalidad(String localidad) {

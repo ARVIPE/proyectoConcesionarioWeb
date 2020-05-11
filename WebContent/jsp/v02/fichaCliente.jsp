@@ -1,12 +1,14 @@
 <%@ page
-	import="java.util.List, 
+	import="java.util.List,
+	java.util.Date,
+	java.text.SimpleDateFormat, 
 	java.util.HashMap,
 	Utils.RequestUtils,
-	model.Fabricante,
-	model.controladores.FabricanteControlador"%>
+	model.Cliente,
+	model.controladores.ClienteControlador"%>
 
 <jsp:include page="cabecera.jsp" flush="true">
-	<jsp:param name="tituloDePagina" value="ficha de Fabricante" />
+	<jsp:param name="tituloDePagina" value="fichaClientes" />
 </jsp:include>
 
 <%
@@ -15,25 +17,32 @@ HashMap<String, Object> hashMap = RequestUtils.requestToHashMap(request);
 
 // Para plasmar la información de un profesor determinado utilizaremos un parámetro, que debe llegar a este Servlet obligatoriamente
 // El parámetro se llama "idProfesor" y gracias a él podremos obtener la información del profesor y mostrar sus datos en pantalla
-Fabricante fabricante = null;
+Cliente cliente = null;
 // Obtengo el profesor a editar, en el caso de que el profesor exista se cargarán sus datos, en el caso de que no exista quedará a null
 try {
-	int idFabricante = RequestUtils.getIntParameterFromHashMap(hashMap, "idFabricante"); // Necesito obtener el id del profesor que se quiere editar. En caso de un alta
+	int idCliente = RequestUtils.getIntParameterFromHashMap(hashMap, "idCliente"); // Necesito obtener el id del profesor que se quiere editar. En caso de un alta
 	// de profesor obtendríamos el valor 0 como idProfesor
-	if (idFabricante != 0) {
-		fabricante = (Fabricante) FabricanteControlador.getControlador().find(idFabricante);
+	if (idCliente != 0) {
+		cliente = (Cliente) ClienteControlador.getControlador().find(idCliente);
 	}
 } catch (Exception e) {
 	e.printStackTrace();
 }
 // Inicializo unos valores correctos para la presentación del profesor
-if (fabricante == null) {
-	fabricante = new Fabricante();
+if (cliente == null) {
+	cliente = new Cliente();
 }
-if (fabricante.getCif() == null)
-	fabricante.setCif("");
-if (fabricante.getNombre() == null)
-	fabricante.setNombre("");
+if (cliente.getDniNie() == null)
+	cliente.setDniNie("");
+if (cliente.getNombre() == null)
+	cliente.setNombre("");
+if (cliente.getApellidos() == null)
+	cliente.setApellidos("");
+if (cliente.getFechaNac() == null)
+	cliente.setFechaNac(null);
+if (cliente.getLocalidad() == null)
+	cliente.setLocalidad("");
+
 
 
 // Ahora debo determinar cuál es la acción que este página debería llevar a cabo, en función de los parámetros de entrada al Servlet.
@@ -49,8 +58,8 @@ String mensajeAlUsuario = "";
 if (RequestUtils.getStringParameterFromHashMap(hashMap, "eliminar") != null) {
 	// Intento eliminar el registro, si el borrado es correcto redirijo la petición hacia el listado de profesores
 	try {
-		FabricanteControlador.getControlador().remove(fabricante);
-		response.sendRedirect(request.getContextPath() + "/jsp/v02/listadoFabricante.jsp"); // Redirección del response hacia el listado
+		ClienteControlador.getControlador().remove(cliente);
+		response.sendRedirect(request.getContextPath() + "/jsp/v02/listadoCliente.jsp"); // Redirección del response hacia el listado
 	} catch (Exception ex) {
 		mensajeAlUsuario = "ERROR - Imposible eliminar. Es posible que existan restricciones.";
 	}
@@ -60,11 +69,18 @@ if (RequestUtils.getStringParameterFromHashMap(hashMap, "eliminar") != null) {
 if (RequestUtils.getStringParameterFromHashMap(hashMap, "guardar") != null) {
 	// Obtengo todos los datos del profesor y los almaceno en BBDD
 	try {
-		fabricante.setCif(RequestUtils.getStringParameterFromHashMap(hashMap, "cif"));
-		fabricante.setNombre(RequestUtils.getStringParameterFromHashMap(hashMap, "nombre"));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		cliente.setDniNie(RequestUtils.getStringParameterFromHashMap(hashMap, "dniNie"));
+		cliente.setNombre(RequestUtils.getStringParameterFromHashMap(hashMap, "nombre"));
+		cliente.setApellidos(RequestUtils.getStringParameterFromHashMap(hashMap, "apellido"));
+		cliente.setLocalidad(RequestUtils.getStringParameterFromHashMap(hashMap, "localidad"));
+		Date date = sdf.parse(RequestUtils.getStringParameterFromHashMap(hashMap, "fechaNac"));
+		cliente.setFechaNac(date);
 
 		// Finalmente guardo el objeto de tipo profesor 
-		FabricanteControlador.getControlador().save(fabricante);
+		ClienteControlador.getControlador().save(cliente);
 		mensajeAlUsuario = "Guardado correctamente";
 	} catch (Exception e) {
 		throw new ServletException(e);
@@ -95,30 +111,55 @@ if (RequestUtils.getStringParameterFromHashMap(hashMap, "guardar") != null) {
 			<!-- form user info -->
 			<div class="card">
 				<div class="card-header">
-					<h4 class="mb-0">Ficha de fabricante</h4>
+					<h4 class="mb-0">Ficha de clientes</h4>
 				</div>
 				<div class="card-body">
-					<a href="listadoFabricante.jsp">Ir al listado de fabricante</a>
+
+					<a href="listadoCliente.jsp">Ir al listado de clientes</a>
 					<form id="form1" name="form1" method="post"
-						action="fichaFabricante.jsp" enctype="multipart/form-data"
+						action="fichaCliente.jsp" enctype="multipart/form-data"
 						class="form" role="form" autocomplete="off">
 						<p />
-						<input type="hidden" name="idFabricante"
-							value="<%=fabricante.getId()%>" />
-						<div class="form-group row">
-							<label class="col-lg-3 col-form-label form-control-label"
-								for="cif">CIF:</label>
-							<div class="col-lg-9">
-								<input name="cif" class="form-control" type="text"
-									id="cif" value="<%=fabricante.getCif()%>" />
-							</div>
-						</div>
+						<input type="hidden" name="idClientes"
+							value="<%=cliente.getId()%>" />
 						<div class="form-group row">
 							<label class="col-lg-3 col-form-label form-control-label"
 								for="nombre">Nombre:</label>
 							<div class="col-lg-9">
 								<input name="nombre" class="form-control" type="text"
-									id="nombre" value="<%=fabricante.getNombre()%>" />
+									id="nombre" value="<%=cliente.getNombre()%>" />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-lg-3 col-form-label form-control-label"
+								for="apellido">Apellido:</label>
+							<div class="col-lg-9">
+								<input name="apellido" class="form-control" type="text"
+									id="apellido" value="<%=cliente.getApellidos()%>" />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-lg-3 col-form-label form-control-label"
+								for="localidad">Localidad:</label>
+							<div class="col-lg-9">
+								<input name="localidad" class="form-control" type="text"
+									id="localidad" value="<%=cliente.getLocalidad()%>" />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-lg-3 col-form-label form-control-label"
+								for="DniNie">Dni:</label>
+							<div class="col-lg-9">
+								<input name="DniNie" class="form-control" type="text"
+									id="DniNie" value="<%=cliente.getDniNie()%>" />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-lg-3 col-form-label form-control-label"
+								for="fechaNac">"FechaNac":</label>
+							<div class="col-lg-9">
+								<input name="fechaNac" class="form-control" type="text"
+									id="fechaNac" value="<%=cliente.getFechaNac()%>" />
 							</div>
 						</div>
 						<div class="form-group row">

@@ -12,7 +12,7 @@
 	<table class="table table-hover">
 		<thead class="thead-dark">
 			<tr>
-				<th>Dni/Nie</th>
+				<th>Dni</th>
 				<th>Nombre</th>
 				<th>Apellidos</th>
 				<th>Fecha de nacimiento</th>

@@ -75,6 +75,11 @@ public class Coche extends Entidad implements Serializable {
 	public void setFabricante(Fabricante fabricante) {
 		this.fabricante = fabricante;
 	}
+	
+	@Override
+	public String toString() {
+		return ""+ id + "";
+	}
 
 	public List<Venta> getVentas() {
 		return this.ventas;
