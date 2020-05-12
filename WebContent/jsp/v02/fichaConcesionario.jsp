@@ -65,6 +65,10 @@ if (RequestUtils.getStringParameterFromHashMap(hashMap, "guardar") != null) {
 		concesionario.setCif(RequestUtils.getStringParameterFromHashMap(hashMap, "cif"));
 		concesionario.setNombre(RequestUtils.getStringParameterFromHashMap(hashMap, "nombre"));
 		concesionario.setLocalidad(RequestUtils.getStringParameterFromHashMap(hashMap, "localidad"));
+		byte[] posibleImagen = RequestUtils.getByteArrayFromHashMap(hashMap, "ficheroImagen");
+		if (posibleImagen != null && posibleImagen.length > 0){
+			concesionario.setImagen(posibleImagen);
+		}
 
 		// Finalmente guardo el objeto de tipo profesor 
 		ConcesionarioControlador.getControlador().save(concesionario);
@@ -107,8 +111,19 @@ if (RequestUtils.getStringParameterFromHashMap(hashMap, "guardar") != null) {
 						action="fichaConcesionario.jsp" enctype="multipart/form-data"
 						class="form" role="form" autocomplete="off">
 						<p />
+							<img class="mx-auto d-block round-circle" 
+					 		src="../../Utils/DownloadImagenConcesionario?idConcesionario=<%=concesionario.getId()%>"
+					 		width="100px" height="100px" />
+					 	<p />
 						<input type="hidden" name="idConcesionario"
 							value="<%=concesionario.getId()%>" />
+						<div class="form-group row">
+					 		<label class="coll-lg-3 col-form-label form-control-label"
+					 		for="ficheroImagen">Imagen:</label>
+					 	<div class="col-lg-9">
+					 		<input name="ficheroImagen" class="form-control-file" type="file" id="ficheroImagen" />
+					 	</div>
+					 </div>
 						<div class="form-group row">
 							<label class="col-lg-3 col-form-label form-control-label"
 								for="cif">Cif:</label>
