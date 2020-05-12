@@ -6,7 +6,7 @@
 	model.controladores.FabricanteControlador"%>
 
 <jsp:include page="cabecera.jsp" flush="true">
-	<jsp:param name="tituloDePagina" value="ficha de Fabricante" />
+	<jsp:param name="tituloDePagina" value="fichaFabricante" />
 </jsp:include>
 
 <%
@@ -14,11 +14,11 @@
 HashMap<String, Object> hashMap = RequestUtils.requestToHashMap(request);
 
 // Para plasmar la información de un profesor determinado utilizaremos un parámetro, que debe llegar a este Servlet obligatoriamente
-// El parámetro se llama "idProfesor" y gracias a él podremos obtener la información del profesor y mostrar sus datos en pantalla
+// El parámetro se llama "idFabricante" y gracias a él podremos obtener la información del profesor y mostrar sus datos en pantalla
 Fabricante fabricante = null;
-// Obtengo el profesor a editar, en el caso de que el profesor exista se cargarán sus datos, en el caso de que no exista quedará a null
+// Obtengo el fabricante a editar, en el caso de que el profesor exista se cargarán sus datos, en el caso de que no exista quedará a null
 try {
-	int idFabricante = RequestUtils.getIntParameterFromHashMap(hashMap, "idFabricante"); // Necesito obtener el id del profesor que se quiere editar. En caso de un alta
+	int idFabricante = RequestUtils.getIntParameterFromHashMap(hashMap, "idFabricante"); // Necesito obtener el id del fabricante que se quiere editar. En caso de un alta
 	// de profesor obtendríamos el valor 0 como idProfesor
 	if (idFabricante != 0) {
 		fabricante = (Fabricante) FabricanteControlador.getControlador().find(idFabricante);
@@ -47,7 +47,7 @@ String mensajeAlUsuario = "";
 
 // Primera acción posible: eliminar
 if (RequestUtils.getStringParameterFromHashMap(hashMap, "eliminar") != null) {
-	// Intento eliminar el registro, si el borrado es correcto redirijo la petición hacia el listado de profesores
+	// Intento eliminar el registro, si el borrado es correcto redirijo la petición hacia el listado de fabricantes
 	try {
 		FabricanteControlador.getControlador().remove(fabricante);
 		response.sendRedirect(request.getContextPath() + "/jsp/v02/listadoFabricante.jsp"); // Redirección del response hacia el listado
@@ -58,12 +58,12 @@ if (RequestUtils.getStringParameterFromHashMap(hashMap, "eliminar") != null) {
 
 // Segunda acción posible: guardar
 if (RequestUtils.getStringParameterFromHashMap(hashMap, "guardar") != null) {
-	// Obtengo todos los datos del profesor y los almaceno en BBDD
+	// Obtengo todos los datos del fabricante y los almaceno en BBDD
 	try {
 		fabricante.setCif(RequestUtils.getStringParameterFromHashMap(hashMap, "cif"));
 		fabricante.setNombre(RequestUtils.getStringParameterFromHashMap(hashMap, "nombre"));
 
-		// Finalmente guardo el objeto de tipo profesor 
+		// Finalmente guardo el objeto de tipo fabricante 
 		FabricanteControlador.getControlador().save(fabricante);
 		mensajeAlUsuario = "Guardado correctamente";
 	} catch (Exception e) {

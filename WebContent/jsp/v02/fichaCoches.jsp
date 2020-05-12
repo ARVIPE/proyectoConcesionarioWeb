@@ -108,7 +108,7 @@ if (RequestUtils.getStringParameterFromHashMap(hashMap, "guardar") != null) {
 				<div class="card-body">
 					<a href="listadoCoches.jsp">Ir al listado de coche</a>
 					<form id="form1" name="form1" method="post"
-						action="fichaCoche.jsp" enctype="multipart/form-data"
+						action="fichaCoches.jsp" enctype="multipart/form-data"
 						class="form" role="form" autocomplete="off">
 						<p />
 						<input type="hidden" name="idCoche"

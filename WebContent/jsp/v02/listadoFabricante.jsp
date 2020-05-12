@@ -18,20 +18,20 @@
 		</thead>
 		<tbody>
 			<%
-				// Hasta la fila anterior ha llegado la primera fila de títulos de la tabla de profesores del centro educativo
-			// En las siguietnes líneas se crea una fila "elemento <tr>" por cada fila de la tabla de BBDD "profesor"
+				// Hasta la fila anterior ha llegado la primera fila de títulos de la tabla de fabricantes
+			// En las siguientes líneas se crea una fila "elemento <tr>" por cada fila de la tabla de BBDD "fabricante"
 			List<Fabricante> fabricantes = FabricanteControlador.getControlador().findAll();
 			for (Fabricante fabricante : fabricantes) {
 			%>
 			<tr>
 				<td><a
-					href="fichaFabricante.jsp?idConcesionario=<%=fabricante.getId()%>"> <%=fabricante.getCif()%>
+					href="fichaFabricante.jsp?idFabricante=<%=fabricante.getId()%>"> <%=fabricante.getCif()%>
 				</a></td>
 				<td><%=fabricante.getNombre()%></td>
 			</tr>
 			<%
 				}
-			// Al finalizar de exponer la lista de profesores termino la tabla y cierro el fichero HTML
+			// Al finalizar de exponer la lista de fabricantes termino la tabla y cierro el fichero HTML
 			%>
 		</tbody>
 	</table>
