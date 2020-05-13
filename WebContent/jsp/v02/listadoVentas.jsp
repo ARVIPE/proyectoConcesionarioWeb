@@ -7,6 +7,22 @@
 	<jsp:param name="tituloDePagina" value="Listado de ventas" />
 </jsp:include>
 
+	<%!
+			public int getOffset(String param){
+				int offset = Integer.parseInt(param);
+				if(offset > 1){
+					return 5 * offset;
+				}
+				else{
+					return 0;
+				}
+				
+			}
+		%>
+		<%! private int offset, paginationIndex; %>
+		<% offset = getOffset(request.getParameter("idPag"));
+			paginationIndex = Integer.parseInt(request.getParameter("idPag"));
+		%>
 
 
 <div class="container">
@@ -22,39 +38,11 @@
 			</tr>
 		</thead>
 		<tbody>
-			<nav class="navbar navbar-expand-lg navbar-light bg-light">
-				<a class="navbar-brand" href="#">Navbar</a>
-				<button class="navbar-toggler" type="button" data-toggle="collapse"
-					data-target="#navbarSupportedContent"
-					aria-controls="navbarSupportedContent" aria-expanded="false"
-					aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-
-				<div class="collapse navbar-collapse" id="navbarSupportedContent">
-					<ul class="navbar-nav mr-auto">
-						<li class="nav-item active"><a class="nav-link" href="listadoFabricante.jsp">Fabricante
-								<span class="sr-only">(current)</span>
-						</a></li>
-						<li class="nav-item active"><a class="nav-link" href="listadoConcesionarios.jsp">Concesionario
-								<span class="sr-only">(current)</span>
-						</a></li>
-						<li class="nav-item active"><a class="nav-link" href="listadoCoches.jsp">Coches
-								<span class="sr-only">(current)</span>
-						</a></li>
-						<li class="nav-item active"><a class="nav-link" href="listadoCliente.jsp">Clientes
-								<span class="sr-only">(current)</span>
-						</a></li>
-						<li class="nav-item active"><a class="nav-link" href="listadoVentas.jsp">Ventas
-								<span class="sr-only">(current)</span>
-						</a></li>
-					</ul>
-				</div>
-			</nav>
+		
 			<%
 				// Hasta la fila anterior ha llegado la primera fila de títulos de la tabla de profesores del centro educativo
 			// En las siguietnes líneas se crea una fila "elemento <tr>" por cada fila de la tabla de BBDD "profesor"
-			List<Venta> ventas = VentaControlador.getControlador().findAll();
+			List<Venta> ventas = VentaControlador.getControlador().findDe5en5(5, offset);
 			for (Venta venta : ventas) {
 			%>
 			<tr>
@@ -76,6 +64,33 @@
 	<input type="submit" class="btn btn-primary" name="nuevo" value="Nuevo"
 		onclick="window.location='fichaVentas.jsp?idVenta=0'" />
 		
+	<ul class="pagination justify-content-center">
+	   <li class="page-item"><a class="page-link" href="?idPag=1">First</a></li>
+	  
+	  <%
+//	  List<Venta> c = VentaControlador.getControlador().findAll();
+	  int num = VentaControlador.getControlador().numRegistros();
+	   double size = Math.ceil(num / 5);
+	  
+	   if(paginationIndex > 1){
+	   
+		  %> 
+		     <li class="page-item"><a class="page-link" href="?idPag=<%= paginationIndex-1 %>" ><%= paginationIndex-1 %></a></li>
+			 
+		  <%
+		  }
+		  %>
+		  <li class="page-item active"><a class="page-link" href="?idPag=<%= paginationIndex %>" ><%= paginationIndex %></a></li>
+		<%
+		if (paginationIndex < size){
+		%>
+		<li class="page-item"><a class="page-link" href="?idPag=<%= paginationIndex+1 %>" ><%= paginationIndex+1 %></a></li>  
+		<%
+		  }
+		  %>
+		     
+		  <li class="page-item"><a class="page-link" href="?idPag=<%=Math.round(size)%>">Last</a></li>
+	 </ul> 
 	
 </div>
 <%@ include file="pie.jsp"%>

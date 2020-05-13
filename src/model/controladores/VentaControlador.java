@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import model.Coche;
 import model.Controlador;
 import model.Venta;
 
@@ -148,6 +149,36 @@ public class VentaControlador extends Controlador {
 		em.close();
 		return resultado;
 	}
+	
+	/**
+	 * Método que limita a 5 los resultados de una lista
+	 * @param limit
+	 * @param offset
+	 * @return
+	 */
+	public List<Venta> findDe5en5 (int limit, int offset) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		Query q = em.createQuery("SELECT c FROM Venta c", Coche.class);
+		q.setMaxResults(limit);
+		q.setFirstResult(offset);
+		List<Venta> resultado = (List<Venta>) q.getResultList();
+		em.close();
+		return resultado;
+	}
+	
+	/**
+	 * Método que saca un entero con el valor de la cantidad de registros
+	 * @return
+	 */
+	public int numRegistros() {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		Query q = em.createNativeQuery("SELECT count(*) FROM Venta");
+		Long cantidad = (Long) q.getSingleResult();
+		em.close();
+		return cantidad.intValue();
+		
+	}
+
 	
 
 	
