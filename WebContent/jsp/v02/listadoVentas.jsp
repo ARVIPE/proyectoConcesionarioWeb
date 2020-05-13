@@ -4,8 +4,10 @@
 	model.controladores.VentaControlador"%>
 
 <jsp:include page="cabecera.jsp" flush="true">
-	<jsp:param name="tituloDePagina" value="Listado de concesionarios" />
+	<jsp:param name="tituloDePagina" value="Listado de ventas" />
 </jsp:include>
+
+
 
 <div class="container">
 	<h1>Listado de ventas</h1>
@@ -57,7 +59,7 @@
 			%>
 			<tr>
 				<td><a
-					href="fichaVenta.jsp?idVenta=<%=venta.getId()%>"> <%=venta.getCliente()%>
+					href="fichaVentas.jsp?idVenta=<%=venta.getId()%>"> <%=venta.getCliente()%>
 				</a></td>
 				<td><%=venta.getConcesionario()%></td>
 				<td><%=venta.getCoche()%></td>
@@ -72,6 +74,8 @@
 	</table>
 	<p />
 	<input type="submit" class="btn btn-primary" name="nuevo" value="Nuevo"
-		onclick="window.location='fichaVenta.jsp?idVenta=0'" />
+		onclick="window.location='fichaVentas.jsp?idVenta=0'" />
+		
+	
 </div>
 <%@ include file="pie.jsp"%>

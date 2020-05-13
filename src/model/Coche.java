@@ -78,7 +78,7 @@ public class Coche extends Entidad implements Serializable {
 	
 	@Override
 	public String toString() {
-		return ""+ id + "";
+		return ""+ bastidor + "";
 	}
 
 	public List<Venta> getVentas() {

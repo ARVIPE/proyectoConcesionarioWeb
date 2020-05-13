@@ -86,7 +86,7 @@ public class Cliente extends Entidad implements Serializable {
 
 	@Override
 	public String toString() {
-		return ""+ id + "";
+		return ""+ nombre + "";
 	}
 
 	public void setLocalidad(String localidad) {

@@ -76,7 +76,7 @@ public class Concesionario extends Entidad implements Serializable {
 	
 	@Override
 	public String toString() {
-		return ""+ id + "";
+		return ""+ nombre + "";
 	}
 
 	public List<Venta> getVentas() {
