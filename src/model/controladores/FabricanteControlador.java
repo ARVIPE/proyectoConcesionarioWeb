@@ -1,13 +1,15 @@
 package model.controladores;
 
-import java.util.List;		
+import java.util.List;			
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import model.Coche;
 import model.Controlador;
 import model.Fabricante;
+import model.Venta;
 
 
 
@@ -149,6 +151,36 @@ public class FabricanteControlador extends Controlador {
 		em.close();
 		return resultado;
 	}
+	
+	/**
+	 * Método que limita a 5 los resultados de una lista
+	 * @param limit
+	 * @param offset
+	 * @return
+	 */
+	public List<Fabricante> findDe5en5 (int limit, int offset) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		Query q = em.createQuery("SELECT f FROM Fabricante f", Fabricante.class);
+		q.setMaxResults(limit);
+		q.setFirstResult(offset);
+		List<Fabricante> resultado = (List<Fabricante>) q.getResultList();
+		em.close();
+		return resultado;
+	}
+	
+	/**
+	 * Método que saca un entero con el valor de la cantidad de registros
+	 * @return
+	 */
+	public int numRegistros() {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		Query q = em.createNativeQuery("SELECT count(*) FROM Fabricante");
+		Long cantidad = (Long) q.getSingleResult();
+		em.close();
+		return cantidad.intValue();
+		
+	}
+
 	
 
 	

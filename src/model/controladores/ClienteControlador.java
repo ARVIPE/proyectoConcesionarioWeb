@@ -7,7 +7,9 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import model.Cliente;
+import model.Coche;
 import model.Controlador;
+import model.Venta;
 
 
 
@@ -128,6 +130,36 @@ public class ClienteControlador extends Controlador {
 		em.close();
 		return resultado;
 	}
+	
+	/**
+	 * Método que limita a 5 los resultados de una lista
+	 * @param limit
+	 * @param offset
+	 * @return
+	 */
+	public List<Cliente> findDe5en5 (int limit, int offset) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		Query q = em.createQuery("SELECT cli FROM Cliente cli", Cliente.class);
+		q.setMaxResults(limit);
+		q.setFirstResult(offset);
+		List<Cliente> resultado = (List<Cliente>) q.getResultList();
+		em.close();
+		return resultado;
+	}
+	
+	/**
+	 * Método que saca un entero con el valor de la cantidad de registros
+	 * @return
+	 */
+	public int numRegistros() {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		Query q = em.createNativeQuery("SELECT count(*) FROM Cliente");
+		Long cantidad = (Long) q.getSingleResult();
+		em.close();
+		return cantidad.intValue();
+		
+	}
+
 	
 
 	
